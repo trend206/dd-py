@@ -27,7 +27,7 @@ This project is an early stage effort.
 
 Getting Started
 ---------------
-Start by creating a ddan object. This ddan represents the DDaN API endpoint
+Start by creating a ddan object. This ddan represents the DDAN API endpoint
 
 .. code-block:: python
 
