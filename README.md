@@ -10,6 +10,9 @@ STATUS: Experimental
 ## Installation
 pip install dd-py
 
+## Documentation
+http://dd-py.readthedocs.io
+
 ## Examples
 
 To run use cases from project dir as an example: python -m examples.authentication<br/>
