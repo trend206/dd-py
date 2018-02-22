@@ -1,3 +1,5 @@
+![alt tag](https://github.com/trend206/dsp3/blob/master/docs/source/_static/dsp3_logo.png?raw=true "DSP3")
+
 ddpy
 ====
 
