@@ -9,4 +9,4 @@ STATUS: Experimental
 
 To run use cases from project dir as an example: python -m ddpy.examples.authentication<br/>
 
-1.  Authentication: [examples/authentication.py](examples/authentication.py)
+1.  Authentication: [ddpy/examples/authentication.py](ddpy/examples/authentication.py)
