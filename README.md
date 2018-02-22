@@ -13,3 +13,4 @@ To run use cases from project dir as an example: python -m ddpy.examples.authent
 
 1.  Authentication: [ddpy/examples/authentication.py](ddpy/examples/authentication.py)
 2.  File Submission: [ddpy/examples/submit_file.py](ddpy/examples/submit_file.py)
+3.  Get black lists: [ddpy/examples/get_blacklists.py](ddpy/examples/get_blacklists.py)

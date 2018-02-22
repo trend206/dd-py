@@ -4,7 +4,7 @@ from typing import List, Dict
 
 class DDAN:
 
-    def __init__(self, api_key: str, analyzer_ip, verify_cert:bool = False, protocol_veriosn:str = "1.5"):
+    def __init__(self, api_key: str, analyzer_ip, protocol_veriosn:str = "1.5", verify_cert:bool = False, cert_path:str = False):
         self.uuid = str(uuid.uuid4())
         self.api_key = api_key
         self.analyzer_ip = analyzer_ip
@@ -14,10 +14,13 @@ class DDAN:
         self.client_hostname = self._get_system_hostname()
         self.source_id = "1"  # source_id of 1 == User submission
         self.source_name = "Python ddpy API Client"
+        self.verify_cert = verify_cert
 
 
         if not verify_cert:
                 requests.packages.urllib3.disable_warnings()
+        else:
+            self.verify_cert = cert_path
 
         self._register()
 
@@ -76,7 +79,7 @@ class DDAN:
         headers["X-DTAS-LastQueryID"] = str(last_query_id)
         # Calculate the header checksum and add it to the list of headers
         headers["X-DTAS-Checksum"] = self.calculate_checksum(headers)
-        r = requests.get(url, verify=False, headers=headers)
+        r = requests.get(url, verify=self.verify_cert, headers=headers)
         return r
 
     def _register(self):
@@ -99,7 +102,7 @@ class DDAN:
         }
         #Calculate the header checksum and add it to the list of headers
         headers["X-DTAS-Checksum"] = self.calculate_checksum(headers)
-        r = requests.get(url, verify=False, headers=headers)
+        r = requests.get(url, verify=self.verify_cert, headers=headers)
         return r
 
     def _get_system_hostname(self):
@@ -107,7 +110,7 @@ class DDAN:
         hostname = platform.node()
         return hostname
 
-    def hash_file(self, filename):
+    def _hash_file(self, filename):
         '''Calculate the SHA1 of a file'''
         h = hashlib.sha1()
         with open(filename, 'rb') as file:
@@ -124,7 +127,7 @@ class DDAN:
                 "submit_file parameter 'path_to_file' must be a STRING whose value is the path to the file you want to submit")
         url = "https://{analyzer_ip}/web_service/sample_upload/{service}".format(analyzer_ip=self.analyzer_ip,
                                                                                  service="simple_upload_sample")
-        sha1 = self.hash_file(path_to_file)
+        sha1 = self._hash_file(path_to_file)
         headers = {
             "X-DTAS-ProtocolVersion": self.protocol_version,
             "X-DTAS-ClientUUID": self.uuid,
@@ -140,5 +143,5 @@ class DDAN:
         # Calculate the header checksum and add it to the list of headers
         headers["X-DTAS-Checksum"] = self.calculate_checksum(headers)
         files = {'uploadsample': open(path_to_file, 'rb')}
-        r = requests.post(url, verify=False, headers=headers, files=files)
+        r = requests.post(url, verify=self.verify_cert, headers=headers, files=files)
         return r
