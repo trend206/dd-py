@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: dd-py
-Version: 0.1a0
+Version: 0.1b0
 Summary: Python 3 client for Trend Micro's Deep Discovery Platform
 Home-page: https://github.com/trend206/ddpy
 Author: Jeff Thorne

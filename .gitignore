@@ -9,3 +9,5 @@ tests/
 venv/
 *DS_Store
 /dist/
+/*.egg-info
+deep_security/*.egg-info

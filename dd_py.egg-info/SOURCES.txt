@@ -7,6 +7,6 @@ dd_py.egg-info/not-zip-safe
 dd_py.egg-info/requires.txt
 dd_py.egg-info/top_level.txt
 ddpy/__init__.py
-ddpy/ddan/__init__.py
-ddpy/ddan/ddan.py
+ddpy/interfaces/__init__.py
+ddpy/interfaces/ddan.py
 ddpy/utils/__init__.py
