@@ -1,4 +1,4 @@
-from ddpy.ddan.ddan import DDAN
+from ddpy.interfaces.ddan import DDAN
 
 
 ddan = DDAN(api_key="", analyzer_ip="")
