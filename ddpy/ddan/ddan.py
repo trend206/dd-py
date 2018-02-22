@@ -20,6 +20,8 @@ class DDAN:
         if not verify_cert:
                 requests.packages.urllib3.disable_warnings()
 
+        self._register()
+
     def test_connection(self):
         '''Issue a request to make sure that all settings are correct and the connection to Analyzer's API is good.'''
         url = "https://{analyzer_ip}/web_service/sample_upload/{service}".format(analyzer_ip=self.analyzer_ip,
@@ -78,7 +80,7 @@ class DDAN:
         r = requests.get(url, verify=False, headers=headers)
         return r
 
-    def register(self):
+    def _register(self):
         '''Send a registration request to register or update registration information on Analyzer.'''
         url = "https://{analyzer_ip}/web_service/sample_upload/{service}".format(analyzer_ip=self.analyzer_ip,
                                                                                  service="register")
@@ -99,7 +101,7 @@ class DDAN:
         #Calculate the header checksum and add it to the list of headers
         headers["X-DTAS-Checksum"] = self.calculate_checksum(headers)
         r = requests.get(url, verify=False, headers=headers)
-        return r.content
+        return r
 
     def _get_system_hostname(self):
         '''Get the hostname of the system from which the script is being run'''
