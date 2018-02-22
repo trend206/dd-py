@@ -8,3 +8,4 @@ share/
 tests/
 venv/
 *DS_Store
+/dist/
