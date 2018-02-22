@@ -14,6 +14,6 @@ pip install dd-py
 
 To run use cases from project dir as an example: python -m examples.authentication<br/>
 
-1.  Authentication: [examples/authentication.py](ddpy/examples/authentication.py)
+1.  Authentication: [examples/authentication.py](examples/authentication.py)
 2.  File Submission: [examples/submit_file.py](examples/submit_file.py)
 3.  Get black lists: [examples/get_blacklists.py](examples/get_blacklists.py)
