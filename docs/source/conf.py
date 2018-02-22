@@ -54,8 +54,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'dsp3'
-copyright = '2016, Jeff Thorne'
+project = 'dd-py'
+copyright = '2018, Jeff Thorne'
 author = 'Jeff Thorne'
 
 # The version info for the project you're documenting, acts as replacement for

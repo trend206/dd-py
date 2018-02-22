@@ -18,7 +18,7 @@ Installation
 
    pip install dd-py
 
-This project is an early stage effort and is currently hosted at pypi.
+This project is an early stage effort.
 
 |
 | Note: Requires Python 3.5.2 or higher due to reliance on Python's typing module.
