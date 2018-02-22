@@ -1,6 +1,5 @@
 import uuid, time, requests, hashlib, platform, os
 
-eaders = {'Content-Type': 'application/json'}
 from typing import List, Dict
 
 class DDAN:
