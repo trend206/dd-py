@@ -5,10 +5,10 @@
 
 
 |
-Welcome to DSP3
+Welcome to dd-py
 ===============
 
-A Python 3 client for Trend Micro's Deep Security Platform.
+A Python 3 client for Trend Micro's Deep Discovery Platform.
 
 
 Installation
@@ -16,9 +16,9 @@ Installation
 
 .. code-block:: python
 
-   pip install dsp3
+   pip install dd-py
 
-This project is an early stage effort and is currently hosted at testpypi.
+This project is an early stage effort and is currently hosted at pypi.
 
 |
 | Note: Requires Python 3.5.2 or higher due to reliance on Python's typing module.
@@ -27,28 +27,28 @@ This project is an early stage effort and is currently hosted at testpypi.
 
 Getting Started
 ---------------
-Start by creating a DSM manager object. This manager represents the DSM API endpoint
+Start by creating a ddan object. This ddan represents the DDaN API endpoint
 
 .. code-block:: python
 
-   from dsp3.models.manager import Manager
+   from ddpy.interfaces.ddan import DDAN
 
-   dsm = Manager(username="username", password="password", tenant="tenant")   #DSaS Example
-   dsm = Manager(username="username", password="password", host="hostname", port="port")   #On Prem DSM Example
+   ddan = DDAN(api_key="", analyzer_ip="")
+   resp = ddan.test_connection()
 
 
-Be sure to close the manager session when finished to avoid exceeding connection limits.
+Be sure to close the session when finished to avoid exceeding connection limits.
 
 .. code-block:: python
 
-   dsm.end_session()
+
 
 
 
 
 Example Usage
 --------------
-Please refer to the Manager api doc at :doc:`dsp3.models.manager` for dsp3 capabilities.
+Please refer to the Manager api doc at :doc:`ddpy.inferfaces.ddan` for dd-py capabilities.
 
 
 1.  Authentication: `github <https://github.com/trend206/dsp3/blob/master/examples/authentication.py/>`_.
@@ -66,9 +66,4 @@ Please refer to the Manager api doc at :doc:`dsp3.models.manager` for dsp3 capab
 All code Examples can be found on `github <https://github.com/trend206/dsp3/tree/master/examples/>`_
 
 
-Use Cases
----------
 
-Examples of customer use cases in the field.
-
-1. Retrieve events to csv files: `github <https://github.com/trend206/dsp3/blob/master/usecases/eventscsv.py>`_
