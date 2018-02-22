@@ -1,4 +1,4 @@
-import uuid, time, requests, hashlib, platform
+import uuid, time, requests, hashlib, platform, os
 
 eaders = {'Content-Type': 'application/json'}
 from typing import List, Dict
@@ -107,3 +107,39 @@ class DDAN:
         '''Get the hostname of the system from which the script is being run'''
         hostname = platform.node()
         return hostname
+
+    def hash_file(self, filename):
+        '''Calculate the SHA1 of a file'''
+        h = hashlib.sha1()
+        with open(filename, 'rb') as file:
+            chunk = 0
+            while chunk != b'':
+                chunk = file.read(1024)
+                h.update(chunk)
+        return h.hexdigest()
+
+    def submit_file(self, path_to_file):
+        '''Upload a file to Analyzer for analysis'''
+        if not ((type(path_to_file) == str) and (os.path.isfile(path_to_file))):
+            raise ValueError(
+                "submit_file parameter 'path_to_file' must be a STRING whose value is the path to the file you want to submit")
+        url = "https://{analyzer_ip}/web_service/sample_upload/{service}".format(analyzer_ip=self.analyzer_ip,
+                                                                                 service="simple_upload_sample")
+        sha1 = self.hash_file(path_to_file)
+        headers = {
+            "X-DTAS-ProtocolVersion": self.protocol_version,
+            "X-DTAS-ClientUUID": self.uuid,
+            "X-DTAS-SourceID": self.source_id,
+            "X-DTAS-SourceName": self.source_name,
+            "X-DTAS-SHA1": sha1,
+            "X-DTAS-Time": self.get_epoch_time(),
+            "X-DTAS-SampleType": "0",  # 0 for file, 1 for URL
+            "X-DTAS-Challenge": self.get_challenge(),
+            "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-ClientUUID,X-DTAS-SourceID,X-DTAS-SourceName,X-DTAS-SHA1,X-DTAS-Time,X-DTAS-SampleType,X-DTAS-Challenge",
+            "X-DTAS-Checksum": ""
+        }
+        # Calculate the header checksum and add it to the list of headers
+        headers["X-DTAS-Checksum"] = self.calculate_checksum(headers)
+        files = {'uploadsample': open(path_to_file, 'rb')}
+        r = requests.post(url, verify=False, headers=headers, files=files)
+        return r
