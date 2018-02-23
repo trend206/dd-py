@@ -39,7 +39,7 @@ Start by creating a ddan object. This objects abstracts and represents the DDAN/
 
 Example Usage
 --------------
-Please refer to the Manager api doc at :doc:`ddpy.inferfaces.ddan` for dd-py capabilities.
+Please refer to the ddan interface api doc at :doc:`ddpy.inferfaces.ddan` for dd-py capabilities.
 
 
 1.  Authentication: `github <https://github.com/trend206/dd-py/blob/master/examples/authentication.py/>`_.

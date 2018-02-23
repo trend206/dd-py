@@ -78,13 +78,14 @@ class DDAN:
         headers = {
             "X-DTAS-ProtocolVersion": self.protocol_version,
             "X-DTAS-ClientUUID": self.uuid,
+            "X-DTAS-LastQueryID": str(last_query_id),
             "X-DTAS-Time": get_epoch_time(),
             "X-DTAS-Challenge": get_challenge(),
             "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-ClientUUID,X-DTAS-LastQueryID,"
                                                "X-DTAS-Time,X-DTAS-Challenge"
         }
         # Add the X-DTAS-LastQueryID header (default is "0")
-        headers["X-DTAS-LastQueryID"] = str(last_query_id)
+        #headers["X-DTAS-LastQueryID"] = str(last_query_id)
         # Calculate the header checksum and add it to the list of headers
         headers["X-DTAS-Checksum"] = self._calculate_checksum(headers)
         r = requests.get(url, verify=self.verify_cert, headers=headers)
