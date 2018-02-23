@@ -26,3 +26,15 @@ def hash_file(filename):
             chunk = file.read(1024)
             h.update(chunk)
     return h.hexdigest()
+
+
+def calculate_checksum(self, headers):
+    '''Calculate the header checksum used for authentication.'''
+    # TODO: Extend method to handle use_checksum_calculating_order property == False
+    if self.use_checksum_calculating_order == True:
+        x_dtas_checksumcalculatingorder_list = headers['X-DTAS-ChecksumCalculatingOrder'].split(",")
+        x_dtas_checksumcalculatingorder = ""
+        for i in x_dtas_checksumcalculatingorder_list:
+            x_dtas_checksumcalculatingorder += headers[i]
+        x_dtas_checksum = hashlib.sha1((self.api_key + x_dtas_checksumcalculatingorder).encode('utf-8')).hexdigest()
+        return x_dtas_checksum

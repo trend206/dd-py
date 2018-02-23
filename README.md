@@ -6,6 +6,7 @@ ddpy
 A Python 3 compatible SDK for Trend Micro's Deep Discovery platform.
 
 STATUS: Experimental
+REQUIRED: Python >= 3.6.4
 
 ## Installation
 pip install dd-py

@@ -21,7 +21,7 @@ Installation
 This project is an early stage effort.
 
 |
-| Note: Requires Python 3.5.2 or higher due to reliance on Python's typing module.
+| Note: Requires Python >= 3.6.4.
 |
 
 
