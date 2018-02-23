@@ -244,7 +244,7 @@ html_sidebars = {
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'DSP3 doc'
+htmlhelp_basename = 'dd-py doc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -270,7 +270,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'dsp3.tex', 'DSP3 Documentation',
+    (master_doc, 'dsp3.tex', 'dd-py Documentation',
      'Jeff Thorne', 'manual'),
 ]
 

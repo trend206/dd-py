@@ -1,7 +1,7 @@
-dsp3
+dd-py
 ====
 
 .. toctree::
    :maxdepth: 4
 
-   dsp3
+   ddpy

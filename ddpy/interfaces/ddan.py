@@ -2,20 +2,30 @@ import uuid, time, requests, hashlib, platform, os
 
 from typing import List, Dict
 
+from ..utils.utils import get_challenge, get_epoch_time, get_system_hostname, hash_file
+
 class DDAN:
 
-    def __init__(self, api_key: str, analyzer_ip, protocol_veriosn:str = "1.5", verify_cert:bool = False, cert_path:str = False):
+    def __init__(self, api_key: str, analyzer_ip, protocol_version:str = "1.5", verify_cert:bool = False, cert_path:str = False):
+        """
+        DDAN used to create an interface for all rest calls offered by DDAN appliance and DTAS.
+
+        :param api_key: ddan api key found under help menu
+        :param analyzer_ip: IP of DDAN APPLIANCE
+        :param protocol_veriosn: current version is 1.5
+        :param verify_cert: path to cert file
+        :param cert_path: optional CA certificates to trust for certificate verification
+        """
         self.uuid = str(uuid.uuid4())
         self.api_key = api_key
         self.analyzer_ip = analyzer_ip
-        self.protocol_version = protocol_veriosn
+        self.protocol_version = protocol_version
         self.use_checksum_calculating_order = True
         self.product_name = "TDA"
-        self.client_hostname = self._get_system_hostname()
+        self.client_hostname = get_system_hostname()
         self.source_id = "1"  # source_id of 1 == User submission
         self.source_name = "Python ddpy API Client"
         self.verify_cert = verify_cert
-
 
         if not verify_cert:
                 requests.packages.urllib3.disable_warnings()
@@ -25,13 +35,19 @@ class DDAN:
         self._register()
 
     def test_connection(self):
-        '''Issue a request to make sure that all settings are correct and the connection to Analyzer's API is good.'''
+        """
+        Issue a request to make sure that all settings are correct and the connection to Analyzer's API is good.
+
+        :return: http response code
+
+        """
+
         url = "https://{analyzer_ip}/web_service/sample_upload/{service}".format(analyzer_ip=self.analyzer_ip,
                                                                                  service="test_connection")
         headers = {
             "X-DTAS-ProtocolVersion": self.protocol_version,
-            "X-DTAS-Time": self.get_epoch_time(),
-            "X-DTAS-Challenge": self.get_challenge(),
+            "X-DTAS-Time": get_epoch_time(),
+            "X-DTAS-Challenge": get_challenge(),
             "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-Time,X-DTAS-Challenge"
         }
         # Calculate the header checksum and add it to the list of headers
@@ -39,15 +55,7 @@ class DDAN:
         r = requests.get(url, verify=False, headers=headers)
         return r
 
-    def get_challenge(self):
-        '''Get the unique challenge UUID value for the Challenge header.'''
-        challenge = str(uuid.uuid4())
-        return challenge
 
-    def get_epoch_time(self):
-        '''Get the epoch time (for the X-DTAS-Time header value.'''
-        epoch_time = str(int(time.time()))
-        return epoch_time
 
     def calculate_checksum(self, headers):
         '''Calculate the header checksum used for authentication.'''
@@ -70,8 +78,8 @@ class DDAN:
         headers = {
             "X-DTAS-ProtocolVersion": self.protocol_version,
             "X-DTAS-ClientUUID": self.uuid,
-            "X-DTAS-Time": self.get_epoch_time(),
-            "X-DTAS-Challenge": self.get_challenge(),
+            "X-DTAS-Time": get_epoch_time(),
+            "X-DTAS-Challenge": get_challenge(),
             "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-ClientUUID,X-DTAS-LastQueryID,"
                                                "X-DTAS-Time,X-DTAS-Challenge"
         }
@@ -93,8 +101,8 @@ class DDAN:
             "X-DTAS-ClientUUID": self.uuid,
             "X-DTAS-SourceID": self.source_id,
             "X-DTAS-SourceName": self.source_name,
-            "X-DTAS-Time": self.get_epoch_time(),
-            "X-DTAS-Challenge": self.get_challenge(),
+            "X-DTAS-Time": get_epoch_time(),
+            "X-DTAS-Challenge": get_challenge(),
             "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-ProductName,X-DTAS-ClientHostname,"
                                                "X-DTAS-ClientUUID,X-DTAS-SourceID,X-DTAS-SourceName,X-DTAS-Time,"
                                                "X-DTAS-Challenge",
@@ -105,38 +113,31 @@ class DDAN:
         r = requests.get(url, verify=self.verify_cert, headers=headers)
         return r
 
-    def _get_system_hostname(self):
-        '''Get the hostname of the system from which the script is being run'''
-        hostname = platform.node()
-        return hostname
 
-    def _hash_file(self, filename):
-        '''Calculate the SHA1 of a file'''
-        h = hashlib.sha1()
-        with open(filename, 'rb') as file:
-            chunk = 0
-            while chunk != b'':
-                chunk = file.read(1024)
-                h.update(chunk)
-        return h.hexdigest()
 
     def submit_file(self, path_to_file):
-        '''Upload a file to Analyzer for analysis'''
+        """
+        Upload a file to Analyzer for analysis
+        :param path_to_file:
+
+        :return: http response codde
+        """
+
         if not ((type(path_to_file) == str) and (os.path.isfile(path_to_file))):
             raise ValueError(
                 "submit_file parameter 'path_to_file' must be a STRING whose value is the path to the file you want to submit")
         url = "https://{analyzer_ip}/web_service/sample_upload/{service}".format(analyzer_ip=self.analyzer_ip,
                                                                                  service="simple_upload_sample")
-        sha1 = self._hash_file(path_to_file)
+        sha1 = hash_file(path_to_file)
         headers = {
             "X-DTAS-ProtocolVersion": self.protocol_version,
             "X-DTAS-ClientUUID": self.uuid,
             "X-DTAS-SourceID": self.source_id,
             "X-DTAS-SourceName": self.source_name,
             "X-DTAS-SHA1": sha1,
-            "X-DTAS-Time": self.get_epoch_time(),
+            "X-DTAS-Time": get_epoch_time(),
             "X-DTAS-SampleType": "0",  # 0 for file, 1 for URL
-            "X-DTAS-Challenge": self.get_challenge(),
+            "X-DTAS-Challenge": get_challenge(),
             "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-ClientUUID,X-DTAS-SourceID,X-DTAS-SourceName,X-DTAS-SHA1,X-DTAS-Time,X-DTAS-SampleType,X-DTAS-Challenge",
             "X-DTAS-Checksum": ""
         }
@@ -145,3 +146,4 @@ class DDAN:
         files = {'uploadsample': open(path_to_file, 'rb')}
         r = requests.post(url, verify=self.verify_cert, headers=headers, files=files)
         return r
+
