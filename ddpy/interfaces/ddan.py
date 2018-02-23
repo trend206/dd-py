@@ -51,13 +51,13 @@ class DDAN:
             "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-Time,X-DTAS-Challenge"
         }
         # Calculate the header checksum and add it to the list of headers
-        headers["X-DTAS-Checksum"] = self.calculate_checksum(headers)
+        headers["X-DTAS-Checksum"] = self._calculate_checksum(headers)
         r = requests.get(url, verify=False, headers=headers)
         return r
 
 
 
-    def calculate_checksum(self, headers):
+    def _calculate_checksum(self, headers):
         '''Calculate the header checksum used for authentication.'''
         # TODO: Extend method to handle use_checksum_calculating_order property == False
         if self.use_checksum_calculating_order == True:
@@ -86,7 +86,7 @@ class DDAN:
         # Add the X-DTAS-LastQueryID header (default is "0")
         headers["X-DTAS-LastQueryID"] = str(last_query_id)
         # Calculate the header checksum and add it to the list of headers
-        headers["X-DTAS-Checksum"] = self.calculate_checksum(headers)
+        headers["X-DTAS-Checksum"] = self._calculate_checksum(headers)
         r = requests.get(url, verify=self.verify_cert, headers=headers)
         return r
 
@@ -109,7 +109,7 @@ class DDAN:
             "X-DTAS-Checksum": ""
         }
         #Calculate the header checksum and add it to the list of headers
-        headers["X-DTAS-Checksum"] = self.calculate_checksum(headers)
+        headers["X-DTAS-Checksum"] = self._calculate_checksum(headers)
         r = requests.get(url, verify=self.verify_cert, headers=headers)
         return r
 
@@ -142,7 +142,7 @@ class DDAN:
             "X-DTAS-Checksum": ""
         }
         # Calculate the header checksum and add it to the list of headers
-        headers["X-DTAS-Checksum"] = self.calculate_checksum(headers)
+        headers["X-DTAS-Checksum"] = self._calculate_checksum(headers)
         files = {'uploadsample': open(path_to_file, 'rb')}
         r = requests.post(url, verify=self.verify_cert, headers=headers, files=files)
         return r
