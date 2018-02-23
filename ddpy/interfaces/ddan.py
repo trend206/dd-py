@@ -66,8 +66,8 @@ class DDAN:
 
     def _register(self):
         '''Send a registration request to register or update registration information on Analyzer.'''
-        url = "https://{}/web_service/sample_upload/{service}".format(analyzer_ip=self.analyzer_ip,
-                                                                                 service="register")
+        url = "https://{}/web_service/sample_upload/register".format(self.analyzer_ip)
+
         headers = {
             "X-DTAS-ProductName": self.product_name,
             "X-DTAS-ClientHostname": self.client_hostname,
