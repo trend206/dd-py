@@ -1,4 +1,4 @@
-![alt tag](https://github.com/trend206/dsp3/blob/master/docs/source/_static/dsp3_logo.png?raw=true "DSP3")
+![alt tag](https://raw.githubusercontent.com/trend206/dsp3/master/docs/source/_static/dsp3_logo3.png?raw=true "DSP3")
 
 ddpy
 ====
