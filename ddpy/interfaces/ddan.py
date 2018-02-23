@@ -1,7 +1,8 @@
 import uuid, time, requests, hashlib, platform, os
 
-from ..utils.utils import get_challenge, get_epoch_time, get_system_hostname, hash_file, calculate_checksum
+from typing import List, Dict
 
+from ..utils.utils import get_challenge, get_epoch_time, get_system_hostname, hash_file, calculate_checksum
 
 class DDAN:
 
