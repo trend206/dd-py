@@ -140,7 +140,7 @@ html_theme = 'alabaster'
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
 #
-# html_title = 'dsp3 v0.1b'
+# html_title = 'ddpy v0.1b'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #
@@ -270,7 +270,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'dsp3.tex', 'dd-py Documentation',
+    (master_doc, 'ddpy.tex', 'dd-py Documentation',
      'Jeff Thorne', 'manual'),
 ]
 
