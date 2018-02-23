@@ -21,7 +21,7 @@ Installation
 This project is an early stage effort.
 
 |
-| Note: Requires Python >= 3.6.4.
+| Note: Requires Python >= 3.5.2
 |
 
 

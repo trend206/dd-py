@@ -42,19 +42,17 @@ class DDAN:
         :return: http response code
         """
 
-        url = "https://{analyzer_ip}/web_service/sample_upload/{service}"\
-               .format(analyzer_ip=self.analyzer_ip, service="test_connection")
+        url = "https://{}/web_service/sample_upload/test_connection".format(self.analyzer_ip)
         headers = {"X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-Time,X-DTAS-Challenge"}
         r = requests.get(url, verify=False, headers=self._build_headers(headers))
         return r
-
 
     def get_black_lists(self, last_query_id:str = "0"):
         '''Issue a request to retrieve all blacklist information'''
         if not ((type(last_query_id) == str) and (last_query_id.isdigit())):
             raise ValueError("get_blacklists parameter 'last_query_id' must be a STRING with a value that's greater than '0'")
 
-        url = f"https://{self.analyzer_ip}/web_service/sample_upload/get_black_lists"
+        url = "https://{}/web_service/sample_upload/get_black_lists".format(self.analyzer_ip)
         print(url)
         headers = {
             "X-DTAS-ClientUUID": self.uuid,
@@ -68,7 +66,7 @@ class DDAN:
 
     def _register(self):
         '''Send a registration request to register or update registration information on Analyzer.'''
-        url = "https://{analyzer_ip}/web_service/sample_upload/{service}".format(analyzer_ip=self.analyzer_ip,
+        url = "https://{}/web_service/sample_upload/{service}".format(analyzer_ip=self.analyzer_ip,
                                                                                  service="register")
         headers = {
             "X-DTAS-ProductName": self.product_name,
@@ -94,7 +92,7 @@ class DDAN:
         """
 
         try:
-            url = f'https://{self.analyzer_ip}/web_service/sample_upload/simple_upload_sample'
+            url = 'https://{}/web_service/sample_upload/simple_upload_sample'.format(self.analyzer_ip)
 
             headers = {
                 "X-DTAS-ClientUUID": self.uuid,
