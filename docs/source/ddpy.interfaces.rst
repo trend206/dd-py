@@ -1,6 +1,15 @@
 ddpy.interfaces package
 =======================
 
+Module contents
+---------------
+
+.. automodule:: ddpy.interfaces
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
 Submodules
 ----------
 
@@ -12,11 +21,13 @@ ddpy.interfaces.ddan module
     :undoc-members:
     :show-inheritance:
 
+ddpy.interfaces.ddi module
+---------------------------
 
-Module contents
----------------
-
-.. automodule:: ddpy.interfaces
+.. automodule:: ddpy.interfaces.ddi
     :members:
     :undoc-members:
     :show-inheritance:
+
+
+
