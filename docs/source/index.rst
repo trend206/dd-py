@@ -42,9 +42,9 @@ Example Usage
 Please refer to the ddan interface api doc at :doc:`ddpy.inferfaces.ddan` for dd-py capabilities.
 
 
-1.  Authentication: `github <https://github.com/trend206/dd-py/blob/master/examples/authentication.py/>`_.
-2.  Get black lists: `github <https://github.com/trend206/dd-py/blob/master/examples/get_blacklists.py/>`_.
-3.  Submit File: `github <https://github.com/trend206/dd-py/blob/master/examples/submit_file.py/>`_.
+1.  Authentication: `github <https://github.com/trend206/dd-py/blob/master/examples/ddan/authentication.py/>`_.
+2.  Get black lists: `github <https://github.com/trend206/dd-py/blob/master/examples/ddan/get_blacklists.py/>`_.
+3.  Submit File: `github <https://github.com/trend206/dd-py/blob/master/examples/ddan/submit_file.py/>`_.
 
 
 All code Examples can be found on `github <https://github.com/trend206/dd-py/tree/master/examples/>`_

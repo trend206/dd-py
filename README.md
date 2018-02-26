@@ -18,6 +18,6 @@ http://dd-py.readthedocs.io
 
 To run use cases from project dir as an example: python -m examples.authentication<br/>
 
-1.  Authentication: [examples/authentication.py](examples/authentication.py)
-2.  File Submission: [examples/submit_file.py](examples/submit_file.py)
-3.  Get black lists: [examples/get_blacklists.py](examples/get_blacklists.py)
+1.  Authentication: [examples/ddan/authentication.py](examples/authentication.py)
+2.  File Submission: [examples/ddan/submit_file.py](examples/submit_file.py)
+3.  Get black lists: [examples/ddan/get_blacklists.py](examples/get_blacklists.py)
