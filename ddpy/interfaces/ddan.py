@@ -30,7 +30,7 @@ class DDAN:
         self.product_name = "TDA"
         self.client_hostname = get_system_hostname()
         self.source_id = "1"  # source_id of 1 == User submission
-        self.source_name = "dd-py API Client"
+        self.source_name = "ddpyclient"
         self.verify_cert = verify_cert
 
         if not verify_cert:
@@ -126,7 +126,6 @@ class DDAN:
             archive_name = 'Archive.zip'
             url = 'https://{}/web_service/sample_upload/upload_sample'.format(self.analyzer_ip)
             meta_string = generate_meta_file_contents(filename, file_hash, archive_password, self.uuid, self.source_id)
-            print(meta_string)
             meta_file_name = "{}.meta".format(file_hash)
             meta_file = open(meta_file_name, 'w')
             meta_file.write(meta_string)
@@ -149,24 +148,25 @@ class DDAN:
 
             header_archive_name = ("{}_{}.zip").format(now.strftime("%Y%m%d-%H%M%S"), hash_file(archive_name))
 
-
             headers = {
                 "X-DTAS-ClientUUID": self.uuid,
                 "X-DTAS-SourceID": self.source_id,
                 "X-DTAS-SourceName": self.source_name,
                 "X-DTAS-Archive-SHA1": hash_file(archive_name),
                 "X-DTAS-Archive-Filename": header_archive_name,
-                "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-ClientUUID,X-DTAS-SourceID,X-DTAS-SourceName," \
+                "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-ClientUUID,X-DTAS-SourceID,X-DTAS-SourceName,"\
                                                    "X-DTAS-Archive-SHA1,X-DTAS-Archive-Filename,X-DTAS-Time,X-DTAS-Challenge",
             }
 
+
             file_obj = {'Archive.zip': open('Archive.zip', 'rb')}
+            final_headers = self._build_headers(headers)
+            print(final_headers)
 
 
-            print(self._build_headers(headers))
             with open(archive_name, 'rb') as fh:
                 mydata = fh.read()
-                r = requests.put(url, verify=self.verify_cert, headers=self._build_headers(headers), files=file_obj)
+                r = requests.put(url, verify=self.verify_cert, headers=final_headers, files=file_obj)
                 print("R: ", r)
             return r
         except Exception as ex:
@@ -191,14 +191,21 @@ class DDAN:
         headers["X-DTAS-Checksum"] = self._calculate_checksum(headers)
         return headers
 
-    def _calculate_checksum(self, headers):
+    def _calculate_checksum(self, headers, body=""):
         """Calculate the header checksum used for authentication."""
+
+        x_dtas_checksumcalculatingorder = ' '
         # TODO: Extend method to handle use_checksum_calculating_order property == False
         if self.use_checksum_calculating_order == True:
             x_dtas_checksumcalculatingorder_list = headers['X-DTAS-ChecksumCalculatingOrder'].split(",")
             x_dtas_checksumcalculatingorder = ""
             for i in x_dtas_checksumcalculatingorder_list:
                 x_dtas_checksumcalculatingorder += headers[i]
-            x_dtas_checksum = hashlib.sha1((self.api_key + x_dtas_checksumcalculatingorder).encode('utf-8')).hexdigest()
-            return x_dtas_checksum
+        else:
+            for key, value in headers.items():
+                x_dtas_checksumcalculatingorder += value
+
+
+        x_dtas_checksum = hashlib.sha1((self.api_key + x_dtas_checksumcalculatingorder).encode('utf-8')).hexdigest()
+        return x_dtas_checksum
 
