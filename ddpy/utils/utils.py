@@ -38,3 +38,9 @@ def calculate_checksum(self, headers):
             x_dtas_checksumcalculatingorder += headers[i]
         x_dtas_checksum = hashlib.sha1((self.api_key + x_dtas_checksumcalculatingorder).encode('utf-8')).hexdigest()
         return x_dtas_checksum
+
+
+def generate_meta_file_contents(orig_file_name: str, sample_file_sha1: str, archive_password: str, client_uuid: str, source_id:str, sample_file_exists:int = 1, sample_type:int = 0):
+    str = "SampleType={}&ClientUUID={}&SourceID={}&SampleFileSHA1={}&SampleFileExist=1&OrigFileName={}&Archpassword={}" \
+           .format(sample_type, client_uuid, source_id, sample_file_sha1, orig_file_name, archive_password)
+    return str

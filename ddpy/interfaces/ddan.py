@@ -1,8 +1,13 @@
 import uuid, time, requests, hashlib, platform, os
+import datetime
+import urllib.parse
+
+import zipfile
+from shutil import copyfile
 
 from typing import List, Dict
 
-from ..utils.utils import get_challenge, get_epoch_time, get_system_hostname, hash_file, calculate_checksum
+from ..utils.utils import get_challenge, get_epoch_time, get_system_hostname, hash_file, calculate_checksum, generate_meta_file_contents
 
 class DDAN:
 
@@ -109,6 +114,64 @@ class DDAN:
             return r
         except Exception as ex:
             print(ex)
+
+    def upload_sample(self, path_to_file:str, archive_password: str = '1234'):
+
+        try:
+
+            now = datetime.datetime.now()
+            now.strftime("%Y%m%d-%H%M%S")
+            path, filename = os.path.split(path_to_file)
+            file_hash = hash_file(path_to_file)
+            archive_name = 'Archive.zip'
+            url = 'https://{}/web_service/sample_upload/upload_sample'.format(self.analyzer_ip)
+            meta_string = generate_meta_file_contents(filename, file_hash, archive_password, self.uuid, self.source_id)
+            print(meta_string)
+            meta_file_name = "{}.meta".format(file_hash)
+            meta_file = open(meta_file_name, 'w')
+            meta_file.write(meta_string)
+            meta_file.close()
+
+            log_file_name = ("{}.log".format(file_hash))
+            log_file = open(log_file_name, 'w')
+            date_enc = urllib.parse.quote(now.strftime("%m/%d/%Y %H:%M:%S")).replace("/", "%2f")
+            log_file.write("Date=%s" % date_enc)
+            log_file.close()
+
+            copyfile(path_to_file, filename)
+
+            os.rename(filename, "{}.dat".format(file_hash))
+
+            with zipfile.ZipFile(archive_name, 'w') as myzip:
+                myzip.write(meta_file_name)
+                myzip.write(log_file_name)
+                myzip.write("{}.dat".format(file_hash))
+
+            header_archive_name = ("{}_{}.zip").format(now.strftime("%Y%m%d-%H%M%S"), hash_file(archive_name))
+
+
+            headers = {
+                "X-DTAS-ClientUUID": self.uuid,
+                "X-DTAS-SourceID": self.source_id,
+                "X-DTAS-SourceName": self.source_name,
+                "X-DTAS-Archive-SHA1": hash_file(archive_name),
+                "X-DTAS-Archive-Filename": header_archive_name,
+                "X-DTAS-ChecksumCalculatingOrder": "X-DTAS-ProtocolVersion,X-DTAS-ClientUUID,X-DTAS-SourceID,X-DTAS-SourceName," \
+                                                   "X-DTAS-Archive-SHA1,X-DTAS-Archive-Filename,X-DTAS-Time,X-DTAS-Challenge",
+            }
+
+            file_obj = {'Archive.zip': open('Archive.zip', 'rb')}
+
+
+            print(self._build_headers(headers))
+            with open(archive_name, 'rb') as fh:
+                mydata = fh.read()
+                r = requests.put(url, verify=self.verify_cert, headers=self._build_headers(headers), files=file_obj)
+                print("R: ", r)
+            return r
+        except Exception as ex:
+            print(ex)
+
 
     def _build_headers(self, call_headers):
         """
